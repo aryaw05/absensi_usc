@@ -42,11 +42,19 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
+@media print {
+  @page {
+    size: A4;
+    margin: 0mm; /* Menghilangkan margin bawaan browser agar ukuran persis */
   }
+
   body {
-    @apply bg-background text-foreground;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Sembunyikan elemen dengan class no-print */
+  .no-print {
+    display: none !important;
   }
 }

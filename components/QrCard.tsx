@@ -10,15 +10,19 @@ import { cn } from "@/lib/utils";
 interface QrCardProps {
   id_peserta: string;
   nama_peserta: string;
+  email?: string;
   asal_sekolah?: string;
-  kategori_lomba?: string;
+  alamat?: string;
+  no_hp?: string;
 }
 
 export default function QrCard({
   id_peserta,
   nama_peserta,
+  email,
   asal_sekolah,
-  kategori_lomba,
+  alamat,
+  no_hp,
 }: QrCardProps) {
   const [dataUrl, setDataUrl] = useState<string>("");
 
@@ -60,8 +64,8 @@ export default function QrCard({
           {asal_sekolah && (
             <p className="text-xs font-medium text-foreground/80 truncate">{asal_sekolah}</p>
           )}
-          {kategori_lomba && (
-            <p className="text-xs font-medium text-foreground/60 mt-0.5">{kategori_lomba}</p>
+          {email && (
+            <p className="text-xs font-medium text-foreground/60 mt-0.5">{email}</p>
           )}
         </div>
 

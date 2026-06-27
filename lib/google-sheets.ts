@@ -15,14 +15,18 @@ const SHEET_ID = process.env.GOOGLE_SHEET_ID!;
 
 export interface Participant {
   id_peserta: string;
+  email: string;
   nama_peserta: string;
   asal_sekolah: string;
-  kategori_lomba: string;
+  alamat?: string;
+  no_hp?: string;
 }
 
 export interface Attendance {
   id_peserta: string;
+  email: string;
   nama_peserta: string;
+  asal_sekolah: string;
   waktu_absen: string;
   status: string;
 }
@@ -66,7 +70,7 @@ function formatDateTime(): string {
 export async function getParticipants(): Promise<Participant[]> {
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: "Peserta!A2:D",
+    range: "Peserta!A2:F",
   });
 
   const rows = res.data.values || [];
@@ -74,16 +78,18 @@ export async function getParticipants(): Promise<Participant[]> {
     .filter((row) => row[0]) // skip empty rows
     .map((row) => ({
       id_peserta: (row[0] || "").trim(),
-      nama_peserta: (row[1] || "").trim(),
-      asal_sekolah: (row[2] || "").trim(),
-      kategori_lomba: (row[3] || "").trim(),
+      email: (row[1] || "").trim(),
+      nama_peserta: (row[2] || "").trim(),
+      asal_sekolah: (row[3] || "").trim(),
+      alamat: (row[4] || "").trim(),
+      no_hp: (row[5] || "").trim(),
     }));
 }
 
 export async function getAttendances(): Promise<Attendance[]> {
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: "Absensi!A2:D",
+    range: "Absensi!A2:H",
   });
 
   const rows = res.data.values || [];
@@ -91,9 +97,11 @@ export async function getAttendances(): Promise<Attendance[]> {
     .filter((row) => row[0])
     .map((row) => ({
       id_peserta: (row[0] || "").trim(),
-      nama_peserta: (row[1] || "").trim(),
-      waktu_absen: (row[2] || "").trim(),
-      status: (row[3] || "").trim(),
+      email: (row[1] || "").trim(),
+      nama_peserta: (row[2] || "").trim(),
+      asal_sekolah: (row[3] || "").trim(),
+      waktu_absen: (row[6] || "").trim(),
+      status: (row[7] || "").trim(),
     }));
 }
 
@@ -156,11 +164,20 @@ export async function markAttendance(
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: "Absensi!A:D",
+      range: "Absensi!A:H",
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [
-          [id_peserta.trim(), participant.nama_peserta, waktu_absen, "Hadir"],
+          [
+            id_peserta.trim(),
+            participant.email || "",
+            participant.nama_peserta,
+            participant.asal_sekolah || "",
+            participant.alamat || "",
+            participant.no_hp || "",
+            waktu_absen,
+            "Hadir"
+          ],
         ],
       },
     });

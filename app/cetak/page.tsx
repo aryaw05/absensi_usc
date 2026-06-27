@@ -2,15 +2,18 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import QRCode from "qrcode";
+import { useReactToPrint } from "react-to-print";
 import { Printer, RefreshCw, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 interface Participant {
   id_peserta: string;
+  email: string;
   nama_peserta: string;
   asal_sekolah: string;
-  kategori_lomba: string;
+  alamat?: string;
+  no_hp?: string;
 }
 
 function IdCard({ participant }: { participant: Participant }) {
@@ -54,9 +57,9 @@ function IdCard({ participant }: { participant: Participant }) {
             {participant.asal_sekolah}
           </p>
         )}
-        {participant.kategori_lomba && (
-          <p className="text-[10px] text-gray-500 font-medium truncate">
-            {participant.kategori_lomba}
+        {participant.email && (
+          <p className="text-[10px] text-neo-black/60 font-medium truncate">
+            {participant.email}
           </p>
         )}
         <div className="mt-auto pt-1">
@@ -72,6 +75,7 @@ function IdCard({ participant }: { participant: Participant }) {
 export default function CetakPage() {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [loading, setLoading] = useState(true);
+  const printRef = useRef<HTMLDivElement>(null);
 
   const fetchParticipants = useCallback(async () => {
     try {
@@ -91,9 +95,10 @@ export default function CetakPage() {
     fetchParticipants();
   }, [fetchParticipants]);
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: "ID Card Peserta",
+  });
 
   if (loading) {
     return (
@@ -128,7 +133,7 @@ export default function CetakPage() {
           </Button>
           <Button
             variant="brand"
-            onClick={handlePrint}
+            onClick={() => handlePrint()}
             disabled={participants.length === 0}
             className="gap-2"
           >
@@ -153,7 +158,7 @@ export default function CetakPage() {
           <p className="text-lg">Belum ada data peserta</p>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-4 justify-center">
+        <div ref={printRef} className="flex flex-wrap gap-4 justify-center print:p-8">
           {participants.map((p) => (
             <IdCard key={p.id_peserta} participant={p} />
           ))}

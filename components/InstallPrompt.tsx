@@ -27,10 +27,14 @@ export default function InstallPrompt() {
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault();
+      
+      if (sessionStorage.getItem("installPromptShown")) return;
+      
       // Stash the event so it can be triggered later.
       setDeferredPrompt(e);
       // Update UI to notify the user they can add to home screen
       setShowPrompt(true);
+      sessionStorage.setItem("installPromptShown", "true");
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -39,8 +43,9 @@ export default function InstallPrompt() {
     // because iOS doesn't support the beforeinstallprompt event
     if (isIosDevice && !isStandalone) {
       const hasDismissed = localStorage.getItem("iosInstallDismissed");
-      if (!hasDismissed) {
+      if (!hasDismissed && !sessionStorage.getItem("installPromptShown")) {
         setShowPrompt(true);
+        sessionStorage.setItem("installPromptShown", "true");
       }
     }
 

@@ -17,9 +17,11 @@ import { Card } from "@/components/ui/card";
 
 interface Participant {
   id_peserta: string;
+  email: string;
   nama_peserta: string;
   asal_sekolah: string;
-  kategori_lomba: string;
+  alamat?: string;
+  no_hp?: string;
 }
 
 export default function PesertaPage() {
@@ -51,7 +53,7 @@ export default function PesertaPage() {
       p.id_peserta.toLowerCase().includes(search.toLowerCase()) ||
       p.nama_peserta.toLowerCase().includes(search.toLowerCase()) ||
       p.asal_sekolah.toLowerCase().includes(search.toLowerCase()) ||
-      p.kategori_lomba.toLowerCase().includes(search.toLowerCase())
+      p.email.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleDownloadAll = async () => {
@@ -140,7 +142,7 @@ export default function PesertaPage() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Cari peserta (nama, ID, sekolah, kategori)..."
+          placeholder="Cari peserta (nama, ID, sekolah, email)..."
           className="w-full pl-12 pr-4 py-3 rounded-2xl bg-background border-2 border-border text-foreground placeholder-muted-foreground focus:outline-none focus:translate-y-1 focus:shadow-none shadow-hard-sm transition-all duration-200 font-bold"
         />
         {search && (
