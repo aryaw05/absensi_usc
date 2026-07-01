@@ -13,7 +13,7 @@ export default function ScanPage() {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 mb-2">
             <ScanLine className="w-6 h-6 text-brand-purpleDark" />
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+            <h1 className="font-display font-extrabold text-2xl md:text-3xl text-foreground">
               Scan Absensi
             </h1>
           </div>

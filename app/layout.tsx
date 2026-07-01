@@ -1,11 +1,27 @@
-import type { Metadata, Viewport } from "next";
-import "./globals.css";
-import Navbar from "@/components/Navbar";
 import InstallPrompt from "@/components/InstallPrompt";
-import { Inter } from "next/font/google";
+import Navbar from "@/components/Navbar";
 import { cn } from "@/lib/utils";
+import type { Metadata, Viewport } from "next";
+import { Archivo_Black, Plus_Jakarta_Sans } from "next/font/google";
+import "./globals.css";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+// const syne = Syne({
+//   subsets: ["latin"],
+//   weight: ["800"],
+//   variable: "--font-display",
+// });
+
+const archivo = Archivo_Black({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-display",
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-sans",
+});
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME || "Absensi Lomba";
 
@@ -38,7 +54,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={cn("font-sans", inter.variable)}>
+    <html
+      lang="id"
+      className={cn("font-sans", archivo.variable, plusJakartaSans.variable)}
+    >
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />

@@ -60,19 +60,47 @@ Prinsip saat membangun komponen baru: *"flat color + black ink outline + rounded
 
 ### 2.2 Tipografi
 
-Font yang terlihat di mockup adalah **geometric sans-serif tebal** dengan karakter bulat (mirip *General Sans*, *Switzer*, atau *Plus Jakarta Sans*). Karena tidak ada metadata font tertanam di gambar, rekomendasi paling praktis & gratis:
+Font yang dipilih:
 
-- **Display/Heading:** `Plus Jakarta Sans` (weight 700–800)
-- **Body/UI:** `Plus Jakarta Sans` (weight 400–600) — bisa juga pakai `Inter` kalau ingin lebih netral untuk body text
+- **Display/Heading:** `Syne` (weight 700–800) — geometric, karakter tegas, cocok untuk heading besar seperti "From Questions to Revelations" dan "Orely is working to find the right answer"
+- **Body/UI:** `Plus Jakarta Sans` (weight 400–600) — dipakai untuk paragraf, label, teks button, badge, dan elemen UI lainnya
+
+#### Cara load font (Next.js — `next/font/google`)
+
+```ts
+// app/layout.tsx atau src/lib/fonts.ts
+import { Syne, Plus_Jakarta_Sans } from "next/font/google";
+
+export const syne = Syne({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  variable: "--font-display",
+});
+
+export const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-sans",
+});
+```
+
+```tsx
+// pasang di <body> root layout
+<body className={`${syne.variable} ${plusJakartaSans.variable} font-sans`}>
+```
+
+> Kalau bukan Next.js (misalnya Vite/CRA biasa), load lewat `<link>` Google Fonts di `index.html`, lalu definisikan `--font-display: 'Syne', sans-serif;` dan `--font-sans: 'Plus Jakarta Sans', sans-serif;` langsung di `globals.css`.
 
 | Token | Ukuran / Line-height | Weight | Tailwind | Contoh pemakaian |
 |---|---|---|---|---|
-| `display` | 28px / 1.15 | 700 (bold) | `text-[28px] leading-[1.15] font-bold tracking-tight` | "From Questions to Revelations", "Orely is working to find the right answer" |
-| `heading` | 20px / 1.3 | 700 (bold) | `text-xl leading-tight font-bold` | "Brain Orely", "Generating...", "Upgrade your plan", "Answer" (nav title) |
-| `label` | 14px / 1.4 | 700 (bold) | `text-sm font-bold` | "Answer:", "Question:" (dengan warna khusus, lihat token warna) |
-| `body` | 14px / 1.5 | 400–500 | `text-sm leading-relaxed` | Paragraf onboarding, isi jawaban, isi pertanyaan |
-| `caption` | 13px / 1.3 | 500–600 | `text-[13px] font-medium` | Teks badge ("240", "1.2M"), checklist item |
-| `button` | 15px / 1.3 | 600 (semibold) | `text-[15px] font-semibold` | Teks di semua button |
+| `display` | 28px / 1.15 | 800 (extrabold) | `font-display text-[28px] leading-[1.15] font-extrabold tracking-tight` | "From Questions to Revelations", "Orely is working to find the right answer" |
+| `heading` | 20px / 1.3 | 700 (bold) | `font-display text-xl leading-tight font-bold` | "Brain Orely", "Generating...", "Upgrade your plan", "Answer" (nav title) |
+| `label` | 14px / 1.4 | 700 (bold) | `font-sans text-sm font-bold` | "Answer:", "Question:" (dengan warna khusus, lihat token warna) |
+| `body` | 14px / 1.5 | 400–500 | `font-sans text-sm leading-relaxed` | Paragraf onboarding, isi jawaban, isi pertanyaan |
+| `caption` | 13px / 1.3 | 500–600 | `font-sans text-[13px] font-medium` | Teks badge ("240", "1.2M"), checklist item |
+| `button` | 15px / 1.3 | 600 (semibold) | `font-sans text-[15px] font-semibold` | Teks di semua button |
+
+> `display` dan `heading` pakai **Syne** (`font-display`) — keduanya satu-satunya role yang pakai font display. Semua role lain (`label`, `body`, `caption`, `button`) pakai **Plus Jakarta Sans** (`font-sans`).
 
 ### 2.3 Spacing
 
@@ -357,14 +385,14 @@ Dua varian: polos (krem) untuk Onboarding/Loading, dan gradient pink untuk halam
 // Varian polos
 <header className="flex items-center justify-between px-4 py-3">
   <Button variant="brandIcon" size="icon"><ArrowLeft className="w-4 h-4" /></Button>
-  <h1 className="text-xl font-bold">Brain Orely</h1>
+  <h1 className="font-display text-xl font-bold">Brain Orely</h1>
   <div className="w-9" /> {/* spacer biar judul tetap center */}
 </header>
 
 // Varian gradient (halaman Answer)
 <header className="flex items-center justify-between px-4 py-3 bg-gradient-pink-header rounded-b-3xl">
   <Button variant="brandIcon" size="icon"><ArrowLeft className="w-4 h-4" /></Button>
-  <h1 className="text-xl font-bold">Answer</h1>
+  <h1 className="font-display text-xl font-bold">Answer</h1>
   <Button variant="brandIcon" size="icon"><Bookmark className="w-4 h-4" /></Button>
 </header>
 ```
@@ -394,7 +422,7 @@ function PaginationDots({ total, active }: { total: number; active: number }) {
 Efek "stabilo" lime di belakang kata "Revelations".
 
 ```tsx
-<h1 className="text-[28px] font-bold leading-[1.15] tracking-tight">
+<h1 className="font-display text-[28px] font-extrabold leading-[1.15] tracking-tight">
   From Questions to{" "}
   <span className="bg-accent px-1 rounded-sm box-decoration-break-clone">
     Revelations

@@ -98,7 +98,7 @@ export default function PesertaPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+          <h1 className="font-display font-extrabold text-2xl md:text-3xl text-foreground">
             Peserta & QR Code
           </h1>
           <p className="text-muted-foreground font-medium mt-1 text-sm">

@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
-import QRCode from "qrcode";
-import { Printer, RefreshCw, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Loader2, Printer, RefreshCw } from "lucide-react";
+import QRCode from "qrcode";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Participant {
   id_peserta: string;
@@ -33,7 +33,7 @@ function IdCard({ participant }: { participant: Participant }) {
         },
         (error) => {
           if (error) console.error("QR error:", error);
-        }
+        },
       );
     }
   }, [participant.id_peserta]);
@@ -112,7 +112,7 @@ export default function CetakPage() {
       {/* Header (hidden in print) */}
       <div className="no-print flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+          <h1 className="font-display font-extrabold text-2xl md:text-3xl text-foreground">
             Cetak ID Card
           </h1>
           <p className="text-muted-foreground font-medium mt-1 text-sm">
@@ -145,9 +145,10 @@ export default function CetakPage() {
       {/* Info (hidden in print) */}
       <Card className="no-print rounded-3xl border-2 border-border bg-card p-4 shadow-hard">
         <p className="text-sm font-medium text-muted-foreground">
-          💡 ID Card dicetak dalam ukuran standar kartu (85.6 × 54 mm). 
-          Pastikan setting printer menggunakan ukuran kertas A4 dan skala 100%.
-          QR Code menggunakan error correction level High agar tetap terbaca meski tercetak kurang sempurna.
+          💡 ID Card dicetak dalam ukuran standar kartu (85.6 × 54 mm). Pastikan
+          setting printer menggunakan ukuran kertas A4 dan skala 100%. QR Code
+          menggunakan error correction level High agar tetap terbaca meski
+          tercetak kurang sempurna.
         </p>
       </Card>
 
