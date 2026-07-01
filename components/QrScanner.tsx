@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { Html5Qrcode, Html5QrcodeScannerState } from "html5-qrcode";
-import {
-  Camera,
-  CameraOff,
-  CheckCircle2,
-  XCircle,
-  AlertTriangle,
-  Loader2,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { Html5Qrcode, Html5QrcodeScannerState } from "html5-qrcode";
+import {
+  AlertTriangle,
+  Camera,
+  CameraOff,
+  CheckCircle2,
+  Loader2,
+  XCircle,
+} from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface ScanResult {
   success: boolean;
@@ -23,8 +23,10 @@ interface ScanResult {
     email: string;
     nama_peserta: string;
     asal_sekolah: string;
-    alamat?: string;
-    no_hp?: string;
+    alamat: string;
+    no_hp: string;
+    waktu_absen: string;
+    status: string;
   };
 }
 
@@ -112,7 +114,7 @@ export default function QrScanner() {
         setProcessing(false);
       }
     },
-    [stopScanner]
+    [stopScanner],
   );
 
   const startScanner = useCallback(async () => {
@@ -133,7 +135,7 @@ export default function QrScanner() {
           aspectRatio: 1,
         },
         handleScan,
-        () => {}
+        () => {},
       );
 
       setIsScanning(true);
@@ -141,7 +143,8 @@ export default function QrScanner() {
       console.error("Camera error:", err);
       setResult({
         success: false,
-        message: "Gagal mengakses kamera. Pastikan izin kamera sudah diberikan.",
+        message:
+          "Gagal mengakses kamera. Pastikan izin kamera sudah diberikan.",
         type: "error",
       });
     }
@@ -230,8 +233,9 @@ export default function QrScanner() {
         variant={isScanning ? "default" : "brand"}
         size="default"
         className={cn(
-          "w-auto px-8 gap-2", 
-          isScanning && "bg-brand-pinkVivid text-foreground hover:bg-brand-pinkSoft border-2 border-border shadow-hard active:translate-x-[3px] active:translate-y-[4px] active:shadow-none"
+          "w-auto px-8 gap-2",
+          isScanning &&
+            "bg-brand-pinkVivid text-foreground hover:bg-brand-pinkSoft border-2 border-border shadow-hard active:translate-x-[3px] active:translate-y-[4px] active:shadow-none",
         )}
       >
         {isScanning ? (
@@ -252,17 +256,14 @@ export default function QrScanner() {
         <Card
           className={cn(
             "w-full p-5 animate-scale-in rounded-3xl",
-            getResultStyle().bg
+            getResultStyle().bg,
           )}
         >
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0">{getResultStyle().icon}</div>
             <div className="flex-1 min-w-0">
               <p
-                className={cn(
-                  "font-bold text-lg",
-                  getResultStyle().titleColor
-                )}
+                className={cn("font-bold text-lg", getResultStyle().titleColor)}
               >
                 {result.type === "success"
                   ? "Berhasil!"
@@ -272,7 +273,9 @@ export default function QrScanner() {
                       ? "Tidak Terdaftar"
                       : "Error"}
               </p>
-              <p className="text-foreground font-medium text-sm mt-1">{result.message}</p>
+              <p className="text-foreground font-medium text-sm mt-1">
+                {result.message}
+              </p>
 
               {result.participant && (
                 <div className="mt-3 space-y-1">
@@ -284,9 +287,9 @@ export default function QrScanner() {
                       {result.participant.asal_sekolah}
                     </p>
                   )}
-                  {result.participant.email && (
+                  {result.participant.no_hp && (
                     <p className="text-foreground/70 font-medium text-sm">
-                      {result.participant.email}
+                      📞 {result.participant.no_hp}
                     </p>
                   )}
                 </div>

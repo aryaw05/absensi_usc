@@ -1,28 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import QRCode from "qrcode";
-import { Download } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
+import { Download } from "lucide-react";
+import QRCode from "qrcode";
+import { useEffect, useState } from "react";
 
 interface QrCardProps {
   id_peserta: string;
+  email?: string;
   nama_peserta: string;
   email?: string;
   asal_sekolah?: string;
   alamat?: string;
   no_hp?: string;
+  waktu_absen?: string;
+  status?: string;
 }
 
 export default function QrCard({
   id_peserta,
+  email,
   nama_peserta,
   email,
   asal_sekolah,
-  alamat,
-  no_hp,
 }: QrCardProps) {
   const [dataUrl, setDataUrl] = useState<string>("");
 
@@ -32,7 +33,9 @@ export default function QrCard({
       margin: 2,
       color: { dark: "#000000", light: "#ffffff" },
       errorCorrectionLevel: "H",
-    }).then(setDataUrl).catch(err => console.error("QR error:", err));
+    })
+      .then(setDataUrl)
+      .catch((err) => console.error("QR error:", err));
   }, [id_peserta]);
 
   const handleDownload = () => {
@@ -49,7 +52,11 @@ export default function QrCard({
         {/* QR Code */}
         <div className="bg-white rounded-2xl border-2 border-border p-2 sm:p-3 mb-3 shadow-hard-sm w-full max-w-[140px] sm:max-w-[180px] aspect-square flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-105">
           {dataUrl ? (
-            <img src={dataUrl} alt={`QR ${id_peserta}`} className="w-full h-auto block rounded-xl object-contain" />
+            <img
+              src={dataUrl}
+              alt={`QR ${id_peserta}`}
+              className="w-full h-auto block rounded-xl object-contain"
+            />
           ) : (
             <div className="w-full h-full bg-muted animate-pulse rounded-xl"></div>
           )}
@@ -57,15 +64,21 @@ export default function QrCard({
 
         {/* Info */}
         <div className="text-center mb-3 w-full">
-          <p className="text-xs font-mono font-bold text-muted-foreground mb-1">{id_peserta}</p>
+          <p className="text-xs font-mono font-bold text-muted-foreground mb-1">
+            {id_peserta}
+          </p>
           <p className="text-sm font-bold text-foreground truncate">
             {nama_peserta}
           </p>
           {asal_sekolah && (
-            <p className="text-xs font-medium text-foreground/80 truncate">{asal_sekolah}</p>
+            <p className="text-xs font-medium text-foreground/80 truncate">
+              {asal_sekolah}
+            </p>
           )}
           {email && (
-            <p className="text-xs font-medium text-foreground/60 mt-0.5">{email}</p>
+            <p className="text-xs font-medium text-foreground/60 mt-0.5 truncate">
+              {email}
+            </p>
           )}
         </div>
 

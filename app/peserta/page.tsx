@@ -1,27 +1,29 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
 import QrCard from "@/components/QrCard";
-import QRCode from "qrcode";
-import JSZip from "jszip";
-import {
-  Search,
-  Download,
-  PackageOpen,
-  Loader2,
-  Users,
-  RefreshCw,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import JSZip from "jszip";
+import {
+  Download,
+  Loader2,
+  PackageOpen,
+  RefreshCw,
+  Search,
+  Users,
+} from "lucide-react";
+import QRCode from "qrcode";
+import { useCallback, useEffect, useState } from "react";
 
 interface Participant {
   id_peserta: string;
   email: string;
   nama_peserta: string;
   asal_sekolah: string;
-  alamat?: string;
-  no_hp?: string;
+  alamat: string;
+  no_hp: string;
+  waktu_absen: string;
+  status: string;
 }
 
 export default function PesertaPage() {
@@ -53,7 +55,8 @@ export default function PesertaPage() {
       p.id_peserta.toLowerCase().includes(search.toLowerCase()) ||
       p.nama_peserta.toLowerCase().includes(search.toLowerCase()) ||
       p.asal_sekolah.toLowerCase().includes(search.toLowerCase()) ||
-      p.email.toLowerCase().includes(search.toLowerCase())
+      p.email.toLowerCase().includes(search.toLowerCase()) ||
+      p.no_hp.toLowerCase().includes(search.toLowerCase()),
   );
 
   const handleDownloadAll = async () => {

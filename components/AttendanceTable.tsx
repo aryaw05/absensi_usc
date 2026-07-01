@@ -5,8 +5,11 @@ import { Card } from "@/components/ui/card";
 import { Clock } from "lucide-react";
 
 interface AttendanceRecord {
+  id_peserta: string;
+  email: string;
   nama_peserta: string;
   asal_sekolah: string;
+  alamat: string;
   waktu_absen: string;
   status: string;
 }
@@ -75,6 +78,10 @@ export default function AttendanceTable({
                 <th className="text-left py-3 px-5 text-muted-foreground font-bold">
                   Nama
                 </th>
+                <th className="text-left py-3 px-5 text-muted-foreground font-bold hidden md:table-cell">
+                  Asal Sekolah
+                </th>
+
                 <th className="text-left py-3 px-5 text-muted-foreground font-bold hidden sm:table-cell">
                   Waktu
                 </th>
@@ -92,7 +99,7 @@ export default function AttendanceTable({
                   <td className="py-3 px-5 text-foreground font-bold">
                     {record.nama_peserta}
                   </td>
-                  <td className="py-3 px-5 text-foreground font-bold">
+                  <td className="py-3 px-5 text-muted-foreground font-medium hidden md:table-cell">
                     {record.asal_sekolah}
                   </td>
                   <td className="py-3 px-5 text-muted-foreground font-medium hidden sm:table-cell">

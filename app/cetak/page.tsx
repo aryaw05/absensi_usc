@@ -1,19 +1,22 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
-import QRCode from "qrcode";
-import { useReactToPrint } from "react-to-print";
-import { Printer, RefreshCw, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Loader2, Printer, RefreshCw } from "lucide-react";
+import QRCode from "qrcode";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useReactToPrint } from "react-to-print";
 
 interface Participant {
   id_peserta: string;
   email: string;
   nama_peserta: string;
   asal_sekolah: string;
-  alamat?: string;
-  no_hp?: string;
+
+  alamat: string;
+  no_hp: string;
+  waktu_absen: string;
+  status: string;
 }
 
 function IdCard({ participant }: { participant: Participant }) {
@@ -32,7 +35,7 @@ function IdCard({ participant }: { participant: Participant }) {
         },
         (error) => {
           if (error) console.error("QR error:", error);
-        }
+        },
       );
     }
   }, [participant.id_peserta]);
@@ -57,9 +60,9 @@ function IdCard({ participant }: { participant: Participant }) {
             {participant.asal_sekolah}
           </p>
         )}
-        {participant.email && (
-          <p className="text-[10px] text-neo-black/60 font-medium truncate">
-            {participant.email}
+        {participant.no_hp && (
+          <p className="text-[10px] text-gray-500 font-medium truncate">
+            📞 {participant.no_hp}
           </p>
         )}
         <div className="mt-auto pt-1">
@@ -146,9 +149,10 @@ export default function CetakPage() {
       {/* Info (hidden in print) */}
       <Card className="no-print rounded-3xl border-2 border-border bg-card p-4 shadow-hard">
         <p className="text-sm font-medium text-muted-foreground">
-          💡 ID Card dicetak dalam ukuran standar kartu (85.6 × 54 mm). 
-          Pastikan setting printer menggunakan ukuran kertas A4 dan skala 100%.
-          QR Code menggunakan error correction level High agar tetap terbaca meski tercetak kurang sempurna.
+          💡 ID Card dicetak dalam ukuran standar kartu (85.6 × 54 mm). Pastikan
+          setting printer menggunakan ukuran kertas A4 dan skala 100%. QR Code
+          menggunakan error correction level High agar tetap terbaca meski
+          tercetak kurang sempurna.
         </p>
       </Card>
 
@@ -158,7 +162,10 @@ export default function CetakPage() {
           <p className="text-lg">Belum ada data peserta</p>
         </div>
       ) : (
-        <div ref={printRef} className="flex flex-wrap gap-4 justify-center print:p-8">
+        <div
+          ref={printRef}
+          className="flex flex-wrap gap-4 justify-center print:p-8"
+        >
           {participants.map((p) => (
             <IdCard key={p.id_peserta} participant={p} />
           ))}

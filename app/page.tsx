@@ -14,7 +14,11 @@ interface Stats {
 
 interface AttendanceRecord {
   id_peserta: string;
+  email: string;
   nama_peserta: string;
+  asal_sekolah: string;
+  alamat: string;
+  no_hp: string;
   waktu_absen: string;
   status: string;
 }
